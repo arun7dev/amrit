@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 
 amritAppBar() {
   return AppBar(
-    title: Text("QUESTION BAMK"),
+    title: Text("QUESTION BANK"),
   );
 }
 
-amritDrawer(context) {
+amritDrawer(context, who) {
   return Drawer(
     child: ListView(
       children: <Widget>[
@@ -23,7 +23,7 @@ amritDrawer(context) {
           trailing: Icon(Icons.arrow_forward),
           onTap: () {
             Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => ComputerScience()));
+                MaterialPageRoute(builder: (context) => ComputerScience(who)));
           },
         ),
       ],

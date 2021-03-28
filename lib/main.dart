@@ -1,8 +1,11 @@
 import 'package:amrit/components.dart';
 import 'package:amrit/screens/bsccomputerscience.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -22,6 +25,8 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
+  final who;
+  MyHomePage(this.who);
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -31,7 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: amritAppBar(),
-      drawer: amritDrawer(context),
+      drawer: amritDrawer(context, widget.who),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -67,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ComputerScience()));
+                            builder: (context) => ComputerScience(widget.who)));
                   },
                 ),
               ),
@@ -127,7 +132,7 @@ class _MyHomeState extends State<MyHome> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => MyHomePage()));
+                                builder: (context) => MyHomePage("STUDENT")));
                       }),
                 ),
                 Padding(
@@ -145,7 +150,7 @@ class _MyHomeState extends State<MyHome> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => MyHomePage()));
+                                builder: (context) => MyHomePage("TEACHER")));
                       }),
                 )
               ],
