@@ -1,6 +1,3 @@
-import 'package:amrit/screens/1st.dart';
-import 'package:amrit/screens/2nd.dart';
-import 'package:amrit/screens/3rd.dart';
 import 'package:amrit/screens/bsccomputerscience.dart';
 import 'package:flutter/material.dart';
 

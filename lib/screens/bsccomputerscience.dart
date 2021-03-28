@@ -68,9 +68,16 @@ class _ComputerScienceState extends State<ComputerScience> {
                                   margin: EdgeInsets.all(18),
                                   elevation: 7.0,
                                   child: Center(
-                                    child: Text(itemList[index].name == null
-                                        ? "QP ${index + 1}"
-                                        : itemList[index].name.toString()),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 3),
+                                      child: Text(
+                                        itemList[index].name == null
+                                            ? "QP ${index + 1}"
+                                            : itemList[index].name.toString(),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -81,50 +88,53 @@ class _ComputerScienceState extends State<ComputerScience> {
                 },
               ),
         floatingActionButton: widget.who == "TEACHER"
-            ? FloatingActionButton(
-                onPressed: () {
-                  showModalBottomSheet(
-                      context: context,
-                      builder: (context) => Container(
-                            height: 200,
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: TextField(
-                                    controller: name,
-                                    decoration: new InputDecoration(
-                                        border: new OutlineInputBorder(
-                                          borderRadius: const BorderRadius.all(
-                                            const Radius.circular(10.0),
+            ? SingleChildScrollView(
+                child: FloatingActionButton(
+                  onPressed: () {
+                    showModalBottomSheet(
+                        context: context,
+                        builder: (context) => Container(
+                              height: 200,
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: TextField(
+                                      controller: name,
+                                      decoration: new InputDecoration(
+                                          border: new OutlineInputBorder(
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              const Radius.circular(10.0),
+                                            ),
                                           ),
-                                        ),
-                                        filled: true,
-                                        hintStyle: new TextStyle(
-                                            color: Colors.grey[800]),
-                                        hintText: "Type Question paper name",
-                                        fillColor: Colors.white70),
+                                          filled: true,
+                                          hintStyle: new TextStyle(
+                                              color: Colors.grey[800]),
+                                          hintText: "Type Question paper name",
+                                          fillColor: Colors.white70),
+                                    ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 30,
-                                ),
-                                MaterialButton(
-                                    child: Text("UPLOAD"),
-                                    color: Colors.green,
-                                    onPressed: () {
-                                      getPdfAndUpload(name.text);
-                                      Navigator.pop(context);
-                                    })
-                              ],
-                            ),
-                          ));
-                },
-                child: Icon(
-                  Icons.add,
-                  color: Colors.white,
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  MaterialButton(
+                                      child: Text("UPLOAD"),
+                                      color: Colors.green,
+                                      onPressed: () {
+                                        getPdfAndUpload(name.text);
+                                        Navigator.pop(context);
+                                      })
+                                ],
+                              ),
+                            ));
+                  },
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                  backgroundColor: Colors.red,
                 ),
-                backgroundColor: Colors.red,
               )
             : null);
   }
@@ -173,7 +183,7 @@ class _ComputerScienceState extends State<ComputerScience> {
       print(data);
       itemList.clear();
       data.forEach((key, value) {
-        Modal m = new Modal(value['PDF'], value['Filen  ame']);
+        Modal m = new Modal(value['PDF'], value['Filename']);
         itemList.add(m);
         print(itemList[0].name);
 
