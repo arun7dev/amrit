@@ -514,18 +514,35 @@ class _noticefullState extends State<noticefull> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
+          child: ListView(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  widget.head,
-                  style: TextStyle(fontSize: 30),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                color: Colors.red,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: Text(
+                      widget.head,
+                      style: TextStyle(fontSize: 30, color: Colors.white),
+                    ),
+                  ),
                 ),
               ),
-              Text(
-                widget.read,
-                style: TextStyle(fontSize: 20),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                color: Colors.blue[100],
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    widget.read,
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
               ),
             ],
           ),
