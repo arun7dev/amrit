@@ -1,3 +1,5 @@
+import 'package:amrit/main.dart';
+import 'package:amrit/screens/adddepartment.dart';
 import 'package:amrit/screens/bsccomputerscience.dart';
 import 'package:flutter/material.dart';
 
@@ -15,13 +17,85 @@ amritDrawer(context, who) {
           'assets/gnc.jpg',
           fit: BoxFit.cover,
         ),
-        ListTile(
-          title: Text("BSC computer science "),
-          trailing: Icon(Icons.arrow_forward),
-          onTap: () {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => ComputerScience(who)));
-          },
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            color: Colors.blue[100],
+            child: GestureDetector(
+                onTap: () {
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => MyHomePage(who)));
+                },
+                child: Center(
+                    child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Home',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ))),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            color: Colors.blue[100],
+            child: GestureDetector(
+                onTap: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AddDepartment(who)));
+                },
+                child: Center(
+                    child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Department',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ))),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            color: Colors.blue[100],
+            child: GestureDetector(
+                onTap: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AddDepartment(who)));
+                },
+                child: Center(
+                    child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Notes',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ))),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            color: Colors.blue[100],
+            child: GestureDetector(
+                onTap: () {
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => MyHomePage(who)));
+                },
+                child: Center(
+                    child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Notice Board',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ))),
+          ),
         ),
       ],
     ),

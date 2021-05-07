@@ -1,4 +1,4 @@
 class Modal {
-  String link, name;
-  Modal(this.link, this.name);
+  String link, name, num;
+  Modal(this.link, this.name, this.num);
 }

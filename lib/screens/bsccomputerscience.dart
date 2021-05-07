@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'package:path/path.dart' as Path;
 
 import 'package:amrit/components.dart';
+import 'package:amrit/screens/adddepartment.dart';
 import 'package:amrit/screens/pdf.dart';
 import 'package:amrit/screens/pdfviewer.dart';
 import 'package:file_picker/file_picker.dart';
@@ -10,28 +12,27 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
-import '1st.dart';
-import '2nd.dart';
-import '3rd.dart';
 import 'modal.dart';
 
 TextEditingController name = TextEditingController();
+var dn;
 
 class ComputerScience extends StatefulWidget {
   final who;
-  ComputerScience(this.who);
+  var name;
+
+  ComputerScience(this.who, this.name);
   @override
   _ComputerScienceState createState() => _ComputerScienceState();
 }
 
 class _ComputerScienceState extends State<ComputerScience> {
   List<Modal> itemList = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("BSC computer science"),
-        ),
+        appBar: amritAppBar(),
         body: itemList.length == 0
             ? Center(child: CircularProgressIndicator())
             : ListView.builder(
@@ -82,6 +83,21 @@ class _ComputerScienceState extends State<ComputerScience> {
                                 ),
                               ),
                             ),
+                            widget.who == "TEACHER"
+                                ? Center(
+                                    child: MaterialButton(
+                                        child: Text('DELETE'),
+                                        color: Colors.red,
+                                        onPressed: () {
+                                          itemList[index].link == null
+                                              ? null
+                                              : deleteFireBaseStorageItem(
+                                                  itemList[index].link,
+                                                  itemList[index].num,
+                                                  widget.name);
+                                        }),
+                                  )
+                                : Text(''),
                           ],
                         ),
                       ));
@@ -139,8 +155,6 @@ class _ComputerScienceState extends State<ComputerScience> {
             : null);
   }
 
-  final mainReference = FirebaseDatabase.instance.reference().child('Database');
-
   Future getPdfAndUpload(name) async {
     FilePickerResult result = await FilePicker.platform.pickFiles();
     File file = File(result.files.single.path);
@@ -149,12 +163,13 @@ class _ComputerScienceState extends State<ComputerScience> {
   }
 
   savePdf(List<int> asset, String name) async {
-    Reference reference = FirebaseStorage.instance.ref().child(name);
+    Reference reference =
+        FirebaseStorage.instance.ref('${widget.name}').child(name);
     UploadTask uploadTask = reference.putData(asset);
     TaskSnapshot snapshot = await uploadTask;
     String url = await snapshot.ref.getDownloadURL();
 
-    documentFileUpload(url, name);
+    documentFileUpload(url, name, CreateCryptoRandomString());
     //function call
   }
 
@@ -164,26 +179,39 @@ class _ComputerScienceState extends State<ComputerScience> {
     return base64Url.encode(values);
   }
 
-  void documentFileUpload(String str, name) {
+  void documentFileUpload(String str, name, num) {
     var data = {
       "PDF": str,
       "Filename": name,
+      "child": num,
       //store data
     };
-    mainReference.child(CreateCryptoRandomString()).set(data).then((v) {
+    FirebaseDatabase.instance
+        .reference()
+        .child('${DecodeString(widget.name)}')
+        .child(num)
+        .set(data)
+        .then((v) {
       print("Store Successfully");
     });
   }
 
   @override
   void initState() {
-    mainReference.once().then((DataSnapshot snap) {
+    print(deptnames().name);
+    dn = widget.name;
+    //print(dn);
+    FirebaseDatabase.instance
+        .reference()
+        .child('${DecodeString(widget.name)}')
+        .once()
+        .then((DataSnapshot snap) {
       print(snap);
       var data = snap.value;
       print(data);
       itemList.clear();
       data.forEach((key, value) {
-        Modal m = new Modal(value['PDF'], value['Filename']);
+        Modal m = new Modal(value['PDF'], value['Filename'], value['child']);
         itemList.add(m);
         print(itemList[0].name);
 
@@ -191,4 +219,36 @@ class _ComputerScienceState extends State<ComputerScience> {
       });
     });
   }
+}
+
+void deleteFireBaseStorageItem(String fileUrl, String delpath, a) {
+  String filePath = fileUrl.replaceAll(
+      new RegExp(
+          r'https://firebasestorage.googleapis.com/v0/b/final-year-project-eb5cd.appspot.com/o/'),
+      '');
+
+  filePath = filePath.replaceAll(new RegExp(r'%2F'), '/');
+
+  filePath = filePath.replaceAll(new RegExp(r'(\?alt).*'), '');
+  print(filePath);
+
+  Reference storageReferance = FirebaseStorage.instance.ref();
+
+  storageReferance
+      .child(filePath)
+      .delete()
+      .then((_) => print('Successfully deleted $filePath storage item'));
+  print(delpath);
+  print(a);
+  FirebaseDatabase.instance
+      .reference()
+      // .child('final-year-project-eb5cd-default-rtdb')
+      .child('$a')
+      .child('$delpath')
+      .remove()
+      .then((value) => print('Successfully deleted $delpath storage item'));
+}
+
+String DecodeString(String string) {
+  return string.replaceAll(".", " ");
 }
